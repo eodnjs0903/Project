@@ -1,0 +1,115 @@
+import java.util.*;
+
+public class Main {
+	static int cc=0;
+	static int bfscount=0;
+	static ArrayList<Integer> DFS=new ArrayList<Integer>();
+	static ArrayList<Integer> BFS=new ArrayList<Integer>();
+	static ArrayList<Node> arr=new ArrayList<Node>();
+	static class Node{
+		boolean visited;
+		ArrayList<Integer> link=new ArrayList<Integer>();
+		int node_count=0;
+		int number;
+		public Node(int num) {
+			visited=false;
+			number=num;
+		}
+		void visit() {
+			visited=true;
+		}
+		boolean has_visited() {
+			return visited;
+		}
+		void connect(int n) {
+			link.add(n);
+			node_count++;
+		}
+		boolean connected(int n) {
+			if(link.contains(n)) {
+				return true;
+			}
+			else
+				return false;
+		}
+		
+		void clean() {
+			visited=false;
+		}
+		void sort() {
+			Collections.sort(link);
+		}
+		boolean all_visit() {
+			for(int i=0;i<link.size();i++) {
+				if(!arr.get(link.get(i)).visited) {
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+	
+	static void DFS(Node v) {
+		if(!v.visited) {
+			v.visit();
+			DFS.add(v.number);
+		}
+		
+		for(int i=0;i<v.node_count;i++) {
+			if(!arr.get(v.link.get(i)).visited) {
+				DFS(arr.get(v.link.get(i)));
+			}
+		}
+	}
+	
+	static void BFS(Node v) {
+		if(!v.visited) {
+			v.visit();
+			BFS.add(v.number);
+		}
+		for(int i=0;i<v.node_count;i++) {
+			if(!arr.get(v.link.get(i)).visited) {
+				arr.get(v.link.get(i)).visit();
+				BFS.add(arr.get(v.link.get(i)).number);
+			}
+		}
+
+	}
+	public static void main(String[] args){
+		Scanner sc=new Scanner(System.in);
+		int n=sc.nextInt();
+		int m=sc.nextInt();
+		int v=sc.nextInt();
+		arr.add(new Node(0));
+		for(int i=0;i<n;i++) {
+			arr.add(new Node(i+1));
+		}
+		for(int i=0;i<m;i++) {
+			int a=sc.nextInt();
+			int b=sc.nextInt();
+			if(!arr.get(a).connected(b)) {
+				arr.get(a).connect(b);
+				arr.get(b).connect(a);
+			}
+		}
+		for(int i=0;i<n;i++) {
+			arr.get(i+1).sort();
+		}
+		DFS(arr.get(v));
+		for(int i=0;i<n;i++) {
+			arr.get(i+1).clean();
+		}
+		BFS(arr.get(v));
+		while(bfscount<BFS.size()) {//추후 수정
+			BFS(arr.get(BFS.get(bfscount++)));
+		}
+		
+		for(int i=0;i<DFS.size();i++) {
+			System.out.print(DFS.get(i)+" ");
+		}
+		System.out.println("");
+		for(int i=0;i<BFS.size();i++) {
+			System.out.print(BFS.get(i)+" ");
+		}
+	}
+}
