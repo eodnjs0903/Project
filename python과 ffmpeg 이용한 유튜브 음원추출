@@ -1,0 +1,13 @@
+step 1. python으로 유튜브 mp4 다운
+from pytube import YouTube
+
+yt=YouTube('https://www.youtube.com/watch?v=GQI2oO-tl2Y')
+
+video=yt.streams.all()
+video[0].download()
+
+
+
+step 2. ffmpeg을 이용한 mp4 -> mp3 음원추출
+cmd 창에서
+>> ffmpeg -i "파일 절대경로.mp4" -acodec libmp3lame -ab 128k "저장할파일절대경로.mp3"
