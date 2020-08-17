@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 public class Main {/*14433 한조 대기 중
- 					이분탐색 문제
+ 					이분매칭 문제
  					https://blog.naver.com/ekthatkxkd/221420531114
  					위의 블로그를 통해 공부한 후 문제를 풀이하였다.
  					이분탐색?
