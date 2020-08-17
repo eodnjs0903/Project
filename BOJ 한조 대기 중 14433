@@ -1,0 +1,84 @@
+import java.io.*;
+import java.util.*;
+public class Main {/*14433 한조 대기 중
+ 					이분탐색 문제
+ 					https://blog.naver.com/ekthatkxkd/221420531114
+ 					위의 블로그를 통해 공부한 후 문제를 풀이하였다.
+ 					이분탐색?
+ 					A,B그룹으로 나눌 수 있고 두 그룹 간 1:1매칭이 이루어질 경우 사용가능
+ 					A,B 그룹 간 1:1 매칭 시 가장 많이 매칭 되는 경우의 수 탐색
+ 					DFS 사용, Network Flow Algorithm 중 하나
+ 					*/
+	static boolean dfs(int n,int m,ArrayList<Integer>[] a,int[] decide_troll_pick,boolean[] checked,int index) {
+		for(int i=0;i<a[index].size();i++) {
+			if(checked[a[index].get(i)]) continue;
+			checked[a[index].get(i)]=true;
+			if(decide_troll_pick[a[index].get(i)]==0||dfs(n,m,a,decide_troll_pick,checked,decide_troll_pick[a[index].get(i)])) {
+				decide_troll_pick[a[index].get(i)]=index;
+				return true;
+			}
+		}
+		return false;
+	}
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st=new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
+		int k1 = Integer.parseInt(st.nextToken());
+		int k2 = Integer.parseInt(st.nextToken());
+		ArrayList<Integer>[] arr=new ArrayList[n+1];//각 ArrayList의 요소들은 i번째 사람이 원하는 트롤픽의 리스트
+		int[] decide_troll_pick=new int[m+1];
+		boolean[] checked=new boolean[m+1];//중복방지
+		boolean[] player=new boolean[n+1];//순서대로 나온다는 보장이 없으므로, 또한 모든 플레이어가 나오지 않으므로
+		for(int i=0;i<=n;i++) {
+			arr[i]=new ArrayList<Integer>();
+		}
+		for(int mm=0;mm<k1;mm++) {
+			st=new StringTokenizer(br.readLine());
+			int i=Integer.parseInt(st.nextToken());
+			int j=Integer.parseInt(st.nextToken());
+			if(!player[i]) {
+				player[i]=true;
+			}
+			arr[i].add(j);
+		}
+		int count1=0;
+		for(int i=1;i<=n;i++) {
+			if(player[i]) {
+				Arrays.fill(checked, false);
+				if(dfs(n,m,arr,decide_troll_pick,checked,i)) count1++;
+			}
+		}
+		
+		//두팀임 한번더 ㅠ
+		ArrayList<Integer>[] arr2=new ArrayList[n+1];
+		decide_troll_pick=new int[m+1];
+		player=new boolean[n+1];
+		for(int i=0;i<=n;i++) {
+			arr2[i]=new ArrayList<Integer>();
+		}
+		for(int mm=0;mm<k2;mm++) {
+			st=new StringTokenizer(br.readLine());
+			int i=Integer.parseInt(st.nextToken());
+			int j=Integer.parseInt(st.nextToken());
+			if(!player[i]) {
+				player[i]=true;
+			}
+			arr2[i].add(j);
+		}
+		int count2=0;
+		for(int i=1;i<=n;i++) {
+			if(player[i]) {
+				Arrays.fill(checked, false);
+				if(dfs(n,m,arr2,decide_troll_pick,checked,i)) count2++;
+			}
+		}
+		if(count1>=count2) 
+			bw.write("그만 알아보자");
+		else
+			bw.write("네 다음 힐딱이");
+		bw.flush();
+	}
+}
