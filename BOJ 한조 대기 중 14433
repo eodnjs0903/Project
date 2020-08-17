@@ -8,6 +8,8 @@ public class Main {/*14433 한조 대기 중
  					A,B그룹으로 나눌 수 있고 두 그룹 간 1:1매칭이 이루어질 경우 사용가능
  					A,B 그룹 간 1:1 매칭 시 가장 많이 매칭 되는 경우의 수 탐색
  					DFS 사용, Network Flow Algorithm 중 하나
+					checked 배열은 플레이어를 체크하는것이 아닌 pick 체크
+					 각 사람마다 픽을 최대 한번 양보한다 check배열을 통해... 체크안하면 무한루프
  					*/
 	static boolean dfs(int n,int m,ArrayList<Integer>[] a,int[] decide_troll_pick,boolean[] checked,int index) {
 		for(int i=0;i<a[index].size();i++) {
